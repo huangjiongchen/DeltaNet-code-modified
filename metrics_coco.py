@@ -107,7 +107,12 @@ def merge_res(done_res, val_res, test_res):
         for m in METRICS:
             item[f'VAL_{m}'] = val[m]
             item[f'TEST_{m}'] = test[m]
-        done_res = done_res.append(item, ignore_index=True)
+        # done_res = done_res.append(item, ignore_index=True)  # append is deprectated in Pandas
+
+        # Create a DataFrame for the new item and concatenate
+        item_df = pd.DataFrame([item])  # Create a single-row DataFrame
+        done_res = pd.concat([done_res, item_df], ignore_index=True)
+
     done_res.sort_values(by=['VAL_BLEU_4'], ascending=False, inplace=True)
     return done_res
 

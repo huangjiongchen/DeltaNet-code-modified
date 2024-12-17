@@ -4,8 +4,46 @@ import argparse
 import json
 import os
 
-from pycocoevalcap.eval import calculate_metrics
+from pycocoevalcap.eval import COCOEvalCap
 
+def calculate_metrics(rng, datasetGTS, datasetRES, mode='all'):
+    """
+    Calculates evaluation metrics using COCOEvalCap.
+    Args:
+        rng (range): Range of image IDs.
+        datasetGTS (dict): Ground truth captions in COCO format.
+        datasetRES (dict): Predicted captions in COCO format.
+        mode (str): Metrics to compute ('all', 'CIDEr', 'Bleu', etc.).
+    Returns:
+        dict: Computed metrics.
+    """
+    class MockCOCO:
+        def __init__(self, annotations):
+            self.imgToAnns = {}
+            for ann in annotations['annotations']:
+                img_id = ann['image_id']
+                if img_id not in self.imgToAnns:
+                    self.imgToAnns[img_id] = []
+                self.imgToAnns[img_id].append({'caption': ann['caption']})
+
+        def getImgIds(self):
+            return list(self.imgToAnns.keys())
+
+    # Convert datasets to COCO format
+    coco = MockCOCO(datasetGTS)
+    cocoRes = MockCOCO(datasetRES)
+
+    # Initialize COCOEvalCap
+    coco_eval = COCOEvalCap(coco, cocoRes)
+    coco_eval.evaluate()
+
+    # Extract metrics
+    if mode == 'all':
+        return coco_eval.eval
+    elif mode in coco_eval.eval:
+        return {mode: coco_eval.eval[mode]}
+    else:
+        raise ValueError(f"Mode '{mode}' not recognized. Available metrics: {list(coco_eval.eval.keys())}.")
 
 def load_json(json_file):
     with open(json_file, 'r') as f:
