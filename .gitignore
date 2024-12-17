@@ -1,0 +1,10 @@
+# Ignore all __pycache__ directories
+__pycache__/
+*/__pycache__/
+
+# Ignore the data folder
+data/
+
+# Ignore other unnecessary files (optional)
+*.pyc
+*.pyo
