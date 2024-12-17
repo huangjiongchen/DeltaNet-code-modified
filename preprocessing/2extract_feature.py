@@ -132,7 +132,7 @@ if __name__ == "__main__":
                         help="output feature directory")
     parser.add_argument('-n', '--num_class', type=int, default=14,
                         help="pretrain model classes")
-    parser.add_argument('-g', '--gpu', type=str, default="7",
+    parser.add_argument('-g', '--gpu', type=str, default="0",
                         help="which gpu to use")
 
     args = parser.parse_args()

@@ -1,8 +1,8 @@
 import sys
-sys.path.append('..')
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import argparse
 import json
-import os
 import pickle
 import pandas as pd
 from collections import Counter

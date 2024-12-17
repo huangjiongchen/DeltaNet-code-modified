@@ -60,7 +60,7 @@ def get_simi(args, split_file, topk=10):
     for subset in SUBSET:
         file_lists = file_split[file_split['split'] == subset]
         for filename in file_lists['filename']:
-            npy_file[filename] = np.load(osp.join(args.feature, filename[:-3] + 'npy')).reshape(-1)
+            npy_file[filename] = np.load(osp.join(args.root, args.feature, filename[:-3] + 'npy')).reshape(-1)
 
     # all similar from train set
     train_lists = file_split[file_split['split'] == 'train']
